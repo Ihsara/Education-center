@@ -13,7 +13,7 @@ def main():
     input_filename = input("Input file: ")
     file_handler = fileOps(input_filename)
     if (file_handler.status):
-        pass
+        data_handler = dataHandl(file_handler.data)
     else:
         pass
 

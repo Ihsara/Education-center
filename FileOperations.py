@@ -36,7 +36,6 @@ class FileOperations(object):
         status = True
         ans = data
         for row in data:
-            stop = False
             if (len(row) != 4):
                 status = False
                 ans = []
