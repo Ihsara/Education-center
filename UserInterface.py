@@ -1,15 +1,7 @@
-from Command import Command
-from os import linesep
+from Command import VALID_COMMANDS_REQ
 from ErrorHandler import ErrorHandler as EH
 
-VALID_COMMANDS_REQ = {
-    "quit"             : 1,
-    "locations"        : 1,
-    "courses"          : 3,
-    "available"        : 1,
-    "courses_in_theme" : 2,
-    "favourite_theme"  : 1,
-}
+
 
 class UserInterface(object):
     def __init__(self, line_starter) -> None: 

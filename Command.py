@@ -1,8 +1,17 @@
-from ErrorHandler import ErrorHandler as EH
+from enum import Enum, auto
 
-class Command(object):
-    def __init__():
-        pass
-
-    def __repr__(self) -> str:
-        return "Command"
+VALID_COMMANDS_REQ = {
+    "quit"             : 1,
+    "locations"        : 1,
+    "courses"          : 3,
+    "available"        : 1,
+    "courses_in_theme" : 2,
+    "favourite_theme"  : 1,
+}
+class Command(Enum):
+    QUIT = auto()
+    LOCATIONS = auto()
+    COURSES = auto()
+    AVAILABLE = auto()
+    COURSES_IN_THEME = auto()
+    FAVOURITE_THEMES = auto()

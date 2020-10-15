@@ -1,5 +1,7 @@
+from Command import Command as cmd
 from ErrorHandler import ErrorHandler as EH
 from Course import Course
+
 
 class DataHandler(object):
     def __init__(self, raw_data_course_list):
@@ -40,10 +42,67 @@ class DataHandler(object):
         for course in self.courses_list:
             print(course)
 
+    def available_command(self, command = []):
+        res = True
+
+        print("Command: Available")
+
+        return res
+
+    def courses_command(self, command = []):
+        res = True
+
+        print("Command: Courses")
+
+        return res
+
+    def locations_command(self, command = []):
+        res = True
+
+        locations_list = self.__populate_locations()
+
+        for location in locations_list:
+            print(location)
+
+        return res
+
+    def courses_in_theme_command(self, command = []):
+        res = True
+
+        print("Command: courses in theme")
+
+        return res
+
+    def favourite_theme_command(self, command = []):
+        res = True
+
+        print("Command: Favourite theme")
+
+        return res
+
+    def process_command(self, command = []):
+        command_type = command[0]
+        result = getattr(self, f"{command_type}_command")(command)
+
+        return result
+
+    def __populate_locations(self):
+        locations_list = []
+        for course in self.courses_list:
+            for loc in course.locations:
+                if (loc not in locations_list):
+                    locations_list.append(loc)
+
+        return sorted(locations_list)
+
+
+
 
 if __name__ == "__main__":
 
     from FileOperations import FileOperations
+
+    data_handler = None
 
     print("Sample data\n")
     input_filename = "data.a"
@@ -55,3 +114,11 @@ if __name__ == "__main__":
         data_handler = DataHandler(file_handler.data)
 
         data_handler.print_courses_list()
+
+    from Command import VALID_COMMANDS_REQ
+
+    commands_list = list(VALID_COMMANDS_REQ.keys())
+    commands_list.remove("quit")
+    for command_keyword in commands_list:
+        command = [command_keyword]
+        data_handler.process_command(command)

@@ -1,5 +1,3 @@
-
-from Command import Command as Cmd
 from Course import Course
 from DataHandler import DataHandler as dataHandl
 from ErrorHandler import ErrorHandler as errorHandl
@@ -11,6 +9,7 @@ LINE_STARTER = ">"
 
 def main():
     main_proc_enable = True
+    data_handler = None
     input_filename = input("Input file: ")
 
     file_handler = fileOps(input_filename)
@@ -28,8 +27,8 @@ def main():
         has_valid_command = user_if.get_command()
 
         if (has_valid_command):
-            command = Command(user_if.pass_command())
-            main_proc_enable = data_handler.process_command(command.pass_query())
+            command = user_if.pass_command()
+            main_proc_enable = data_handler.process_command(command)
 
 
 if __name__ == "__main__":
