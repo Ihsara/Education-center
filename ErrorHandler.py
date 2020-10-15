@@ -1,3 +1,5 @@
+
+
 class ErrorHandler(object):
     def __init__(self, type_error):
         self.error_type = type_error

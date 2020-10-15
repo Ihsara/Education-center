@@ -16,7 +16,6 @@ class DataHandler(object):
             found = False
             for course in temp:
                 if (course.name == line[2]):
-                    print("Found!")
                     course.update_info(
                         location=line[0],
                         theme=line[1],
