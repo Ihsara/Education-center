@@ -95,15 +95,40 @@ class DataHandler(object):
 
     def courses_in_theme_command(self, command = []):
         res = True
+        query_theme = command[1]
+        courses_in_theme = []
 
-        print("Command: courses in theme")
+        for course in self.courses_list:
+            if (course.theme == query_theme):
+                courses_in_theme.append(course.name)
+
+        for course in sorted(courses_in_theme):
+            print(course)
 
         return res
 
     def favourite_theme_command(self, command = []):
         res = True
 
-        print("Command: Favourite theme")
+        total_enrollments_per_theme = {}
+
+        for course in self.courses_list:
+            if (course.theme not in total_enrollments_per_theme):
+                total_enrollments_per_theme[course.theme] = sum(course.enrollments.values())
+            else:
+                total_enrollments_per_theme[course.theme] += sum(course.enrollments.values())
+
+
+        max_enrollments = max(total_enrollments_per_theme,
+                key= total_enrollments_per_theme.get)
+        
+        max_enrollments_val = total_enrollments_per_theme[max_enrollments]
+
+        themes_with_max_enrollments = [theme for theme, en_count in total_enrollments_per_theme.items() if en_count == max_enrollments_val]
+
+        print(f"{max_enrollments_val} enrollments in themes")
+        for theme in themes_with_max_enrollments:
+            print(f"--- {theme}")
 
         return res
 
@@ -161,4 +186,23 @@ if __name__ == "__main__":
 
     print("\nCommand: Available")
     command = ["available"]
+    data_handler.process_command(command)
+
+    print("\nCommand: courses in theme")
+    command = ["courses_in_theme", "Exercise"]
+    data_handler.process_command(command)
+
+    print("\nCommand: Favourite theme")
+    print("\nEg: 1")
+    command = ["favourite_theme"]
+    data_handler.process_command(command)
+
+    print("\nEg: 2")
+    input_filename = "two_full.input"
+    
+    file_handler = FileOperations(input_filename)
+
+    if (file_handler.status):
+        data_handler = DataHandler(file_handler.data)
+    command = ["favourite_theme"]
     data_handler.process_command(command)
