@@ -8,6 +8,7 @@ class DataHandler(object):
         self.courses_list = self.process_raw_data_input(
             raw_data_course_list
         )
+        self.is_empty_data = True if self.courses_list == [] else False
 
     def __repr__(self) -> str:
         return "DataHandler"
@@ -110,25 +111,28 @@ class DataHandler(object):
     def favourite_theme_command(self, command = []):
         res = True
 
-        total_enrollments_per_theme = {}
+        if (not self.is_empty_data):
+            total_enrollments_per_theme = {}
 
-        for course in self.courses_list:
-            if (course.theme not in total_enrollments_per_theme):
-                total_enrollments_per_theme[course.theme] = sum(course.enrollments.values())
-            else:
-                total_enrollments_per_theme[course.theme] += sum(course.enrollments.values())
+            for course in self.courses_list:
+                if (course.theme not in total_enrollments_per_theme):
+                    total_enrollments_per_theme[course.theme] = sum(course.enrollments.values())
+                else:
+                    total_enrollments_per_theme[course.theme] += sum(course.enrollments.values())
 
 
-        max_enrollments = max(total_enrollments_per_theme,
-                key= total_enrollments_per_theme.get)
-        
-        max_enrollments_val = total_enrollments_per_theme[max_enrollments]
+            max_enrollments = max(total_enrollments_per_theme,
+                    key= total_enrollments_per_theme.get)
+            
+            max_enrollments_val = total_enrollments_per_theme[max_enrollments]
 
-        themes_with_max_enrollments = [theme for theme, en_count in total_enrollments_per_theme.items() if en_count == max_enrollments_val]
+            themes_with_max_enrollments = [theme for theme, en_count in total_enrollments_per_theme.items() if en_count == max_enrollments_val]
 
-        print(f"{max_enrollments_val} enrollments in themes")
-        for theme in themes_with_max_enrollments:
-            print(f"--- {theme}")
+            print(f"{max_enrollments_val} enrollments in themes")
+            for theme in themes_with_max_enrollments:
+                print(f"--- {theme}")
+        else: 
+            print("No enrollments")
 
         return res
 
@@ -206,3 +210,13 @@ if __name__ == "__main__":
         data_handler = DataHandler(file_handler.data)
     command = ["favourite_theme"]
     data_handler.process_command(command)
+
+    print("\nEg: 3")
+    input_filename = "empty_file.input"
+    
+    file_handler = FileOperations(input_filename)
+
+    if (file_handler.status):
+        data_handler = DataHandler(file_handler.data)
+    command = ["favourite_theme"]
+    data_handler.process_command(command)    
