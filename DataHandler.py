@@ -9,6 +9,7 @@ class DataHandler(object):
             raw_data_course_list
         )
         self.is_empty_data = True if self.courses_list == [] else False
+        self.error_handler = EH("Data Handler")
 
     def __repr__(self) -> str:
         return "DataHandler"
@@ -71,16 +72,22 @@ class DataHandler(object):
         query_theme = command[2].replace("\"", "")
         query_location = command[1]
 
-        course_enrollment = []
+        if (query_location in self.__populate_locations()):
+            if (query_theme in self.__populate_themes()):
+                course_enrollment = []
 
-        for course in self.courses_list:
-            if (course.theme == query_theme and 
-                query_location in course.locations):
-                enrollment_amount = course.enrollments[query_location]
-                if (enrollment_amount != FULL_ENROLLMENT):
-                    print(f"{course.name} --- {enrollment_amount} enrollments")
-                else:
-                    print(f"{course.name} --- full")
+                for course in self.courses_list:
+                    if (course.theme == query_theme and 
+                        query_location in course.locations):
+                        enrollment_amount = course.enrollments[query_location]
+                        if (enrollment_amount != FULL_ENROLLMENT):
+                            print(f"{course.name} --- {enrollment_amount} enrollments")
+                        else:
+                            print(f"{course.name} --- full")
+            else:
+                self.error_handler.report("Error: unknown theme")
+        else:
+            self.error_handler.report("Error: unknown location name")
 
         return res
 
@@ -99,16 +106,19 @@ class DataHandler(object):
         query_theme = command[1]
         courses_in_theme = []
 
-        for course in self.courses_list:
-            if (course.theme == query_theme):
-                courses_in_theme.append(course.name)
+        if (query_theme in self.__populate_themes()):
+            for course in self.courses_list:
+                if (course.theme == query_theme):
+                    courses_in_theme.append(course.name)
 
-        for course in sorted(courses_in_theme):
-            print(course)
+            for course in sorted(courses_in_theme):
+                print(course)
+        else:
+            self.error_handler.report("Error: unknown theme")
 
         return res
 
-    def favourite_theme_command(self, command = []):
+    def favorite_theme_command(self, command = []):
         res = True
 
         if (not self.is_empty_data):
@@ -150,6 +160,14 @@ class DataHandler(object):
                     locations_list.append(loc)
 
         return sorted(locations_list)
+
+    def __populate_themes(self):
+        theme_list = []
+        for course in self.courses_list:
+            if course.theme not in theme_list:
+                theme_list.append(course.theme)
+
+        return sorted(theme_list)
 
 
 if __name__ == "__main__":
@@ -196,9 +214,9 @@ if __name__ == "__main__":
     command = ["courses_in_theme", "Exercise"]
     data_handler.process_command(command)
 
-    print("\nCommand: Favourite theme")
+    print("\nCommand: Favorite theme")
     print("\nEg: 1")
-    command = ["favourite_theme"]
+    command = ["favorite_theme"]
     data_handler.process_command(command)
 
     print("\nEg: 2")
@@ -208,7 +226,7 @@ if __name__ == "__main__":
 
     if (file_handler.status):
         data_handler = DataHandler(file_handler.data)
-    command = ["favourite_theme"]
+    command = ["favorite_theme"]
     data_handler.process_command(command)
 
     print("\nEg: 3")
@@ -218,5 +236,5 @@ if __name__ == "__main__":
 
     if (file_handler.status):
         data_handler = DataHandler(file_handler.data)
-    command = ["favourite_theme"]
+    command = ["favorite_theme"]
     data_handler.process_command(command)    

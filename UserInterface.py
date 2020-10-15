@@ -28,11 +28,19 @@ class UserInterface(object):
 
     def __validate_command(self, raw_command):
         command = raw_command.split(" ")
-        if (command[0] in self.__valid_commands_req and 
-            self.__valid_commands_req[command[0]] == len(command)):
-            self.__current_command = command
-            return True
-
+        try:
+            if (command[-1][-1] == command[-2][0] == '"'):
+                command [-2] = " ".join(command[-2], command[-1]) #Hardcoded stuffs need fix
+                del command[-1]
+        except IndexError:
+            pass
+        
+        if (command[0] in self.__valid_commands_req):
+            if (self.__valid_commands_req[command[0]] != len(command)):
+                self.__error_handler.report(f"Error: error in command {command[0]}")
+            else:
+                self.__current_command = command
+                return True
         else:
             self.__error_handler.report(f"Error: Unknown command: {command[0]}")
             return False

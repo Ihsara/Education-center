@@ -6,7 +6,7 @@ VALID_COMMANDS_REQ = {
     "courses"          : 3,
     "available"        : 1,
     "courses_in_theme" : 2,
-    "favourite_theme"  : 1,
+    "favorite_theme"  : 1,
 }
 class Command(Enum):
     QUIT = auto()
