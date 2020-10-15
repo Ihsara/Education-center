@@ -18,6 +18,15 @@ class Course(object):
         Enrollments: {self.enrollments}
         """
 
+    def __gt__(self, course):
+        return self.name == sorted([self.name, course.name])[1]
+
+    def __lt__(self, course):
+        return self.name == sorted([self.name, course.name])[0]
+
+    def __eq__(self, course):
+        return self.name == course.name
+
     def get_theme(self):
         return self.theme
 
@@ -31,7 +40,7 @@ class Course(object):
         if (enrollment == "full"):
             self.enrollments[location] = FULL_ENROLLMENT
         else:
-            self.enrollments[location] = enrollment
+            self.enrollments[location] = int(enrollment)
 
     def __update_location(self,location):
         if (location not in self.locations):

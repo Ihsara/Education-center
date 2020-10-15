@@ -35,7 +35,7 @@ class DataHandler(object):
                     )
                 temp.append(tmp)
 
-        return temp
+        return sorted(temp)
 
 
     def print_courses_list(self):
@@ -44,8 +44,24 @@ class DataHandler(object):
 
     def available_command(self, command = []):
         res = True
+        locations_list = self.__populate_locations()
+        course_list = []
 
-        print("Command: Available")
+        for location in locations_list:
+            for course in self.courses_list:
+                if (location in course.locations and 
+                    course.enrollments[location] < FULL_ENROLLMENT):
+                    course_list.append(
+                        (
+                            location,
+                            course.theme,
+                            course.name
+                        )
+                    )
+
+        sorted_course_list = sorted(course_list)
+        for course in sorted_course_list:
+            print(f"{course[0]} : {course[1]} : {course[2]}")
 
         return res
 
@@ -64,7 +80,6 @@ class DataHandler(object):
                     print(f"{course.name} --- {enrollment_amount} enrollments")
                 else:
                     print(f"{course.name} --- full")
-                
 
         return res
 
@@ -108,8 +123,6 @@ class DataHandler(object):
         return sorted(locations_list)
 
 
-
-
 if __name__ == "__main__":
 
     from FileOperations import FileOperations
@@ -133,15 +146,19 @@ if __name__ == "__main__":
     command = ["locations"]
     data_handler.process_command(command)
 
-    print("Command: courses <location> <theme>")
-    print("Eg: 1\n")
+    print("\nCommand: courses <location> <theme>")
+    print("\nEg: 1")
     command = ["courses", "Lempaala", "Exercise"]
     data_handler.process_command(command)
 
-    print("Eg: 2\n")
+    print("\nEg: 2")
     command = ["courses", "Vesilahti", '"Information technology"']
     data_handler.process_command(command)
 
-    print("Eg: 3\n")
+    print("\nEg: 3")
     command = ["courses", "Nokia", '"Dance"']
+    data_handler.process_command(command)
+
+    print("\nCommand: Available")
+    command = ["available"]
     data_handler.process_command(command)
