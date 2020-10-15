@@ -1,6 +1,6 @@
 from Command import Command as cmd
 from ErrorHandler import ErrorHandler as EH
-from Course import Course
+from Course import Course, FULL_ENROLLMENT
 
 
 class DataHandler(object):
@@ -51,8 +51,20 @@ class DataHandler(object):
 
     def courses_command(self, command = []):
         res = True
+        query_theme = command[2].replace("\"", "")
+        query_location = command[1]
 
-        print("Command: Courses")
+        course_enrollment = []
+
+        for course in self.courses_list:
+            if (course.theme == query_theme and 
+                query_location in course.locations):
+                enrollment_amount = course.enrollments[query_location]
+                if (enrollment_amount != FULL_ENROLLMENT):
+                    print(f"{course.name} --- {enrollment_amount} enrollments")
+                else:
+                    print(f"{course.name} --- full")
+                
 
         return res
 
@@ -117,8 +129,19 @@ if __name__ == "__main__":
 
     from Command import VALID_COMMANDS_REQ
 
-    commands_list = list(VALID_COMMANDS_REQ.keys())
-    commands_list.remove("quit")
-    for command_keyword in commands_list:
-        command = [command_keyword]
-        data_handler.process_command(command)
+    print("\nCommand: locations")
+    command = ["locations"]
+    data_handler.process_command(command)
+
+    print("Command: courses <location> <theme>")
+    print("Eg: 1\n")
+    command = ["courses", "Lempaala", "Exercise"]
+    data_handler.process_command(command)
+
+    print("Eg: 2\n")
+    command = ["courses", "Vesilahti", '"Information technology"']
+    data_handler.process_command(command)
+
+    print("Eg: 3\n")
+    command = ["courses", "Nokia", '"Dance"']
+    data_handler.process_command(command)
