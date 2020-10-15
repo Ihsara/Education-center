@@ -16,8 +16,6 @@ def main():
 
     if (file_handler.status):
         data_handler = dataHandl(file_handler.data)
-
-        data_handler.print_courses_list()
     else:
         main_proc_enable = False
 
@@ -26,9 +24,11 @@ def main():
     while(main_proc_enable):
         has_valid_command = user_if.get_command()
 
-        if (has_valid_command):
+        if (has_valid_command and not user_if.is_quit()):
             command = user_if.pass_command()
             main_proc_enable = data_handler.process_command(command)
+        else:
+            main_proc_enable = False
 
 
 if __name__ == "__main__":

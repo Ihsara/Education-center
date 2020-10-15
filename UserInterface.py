@@ -27,14 +27,14 @@ class UserInterface(object):
         return has_valid_command
 
     def __validate_command(self, raw_command):
-        command = raw_command.split(" ")
-        try:
-            if (command[-1][-1] == command[-2][0] == '"'):
-                command [-2] = " ".join(command[-2], command[-1]) #Hardcoded stuffs need fix
-                del command[-1]
-        except IndexError:
-            pass
-        
+        if (len(raw_command.split(" ")) > 1):
+            sep_last_command = raw_command.split(" \"")
+            command = sep_last_command[0].split(" ")
+            if (len(sep_last_command) == 2):
+                command.append(sep_last_command[1])
+        else: 
+            command = raw_command.split(" ")
+
         if (command[0] in self.__valid_commands_req):
             if (self.__valid_commands_req[command[0]] != len(command)):
                 self.__error_handler.report(f"Error: error in command {command[0]}")

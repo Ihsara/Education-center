@@ -3,11 +3,12 @@ from ErrorHandler import ErrorHandler as EH
 
 class FileOperations(object):
     def __init__(self, input_filename) -> None:
-        self.raw_data_container = self.__get_data(input_filename)
         self.error_handler = EH("file")
-        self.data, self.status = self.__verify_data(
-            self.__clean_up_raw_data()
-        )
+        self.raw_data_container = self.__get_data(input_filename)
+        if (self.status):
+            self.data, self.status = self.__verify_data(
+                self.__clean_up_raw_data()
+            )
 
     def __repr__(self) -> str:
         return "File Operations"
@@ -17,9 +18,11 @@ class FileOperations(object):
         try:
             with open(input_filename) as f:
                 temp = f.readlines()
+            self.status = True
         except FileNotFoundError:
+            self.status = False
             self.error_handler.report("Error: the input file cannot be opened")
-
+            
         return temp
 
     def __clean_up_raw_data(self):
@@ -52,7 +55,6 @@ class FileOperations(object):
         return ans, status
 
 
-
 if __name__ == "__main__":
 
     print("Sample data\n")
@@ -74,4 +76,8 @@ if __name__ == "__main__":
     file_handler = FileOperations(input_filename)
     print(file_handler.raw_data_container, "\n")
     print(file_handler.status , "\n")
-    print(file_handler.data, "\n")      
+    print(file_handler.data, "\n")     
+
+    print("Sample missing field data\n")
+    input_filename = "none_existence.input"
+    file_handler = FileOperations(input_filename)
