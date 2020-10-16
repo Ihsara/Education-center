@@ -1,3 +1,5 @@
+#pragma once
+
 #include <algorithm> // TO DO: Make sure this project allow usage of this
 #include <map>
 #include <string> 

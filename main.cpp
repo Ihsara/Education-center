@@ -6,14 +6,12 @@
 
 #include "FileOperation.h"
 #include "DataHandler.h"
+#include "UserInterface.h"
 
 /**
  * @brief This program need a lot of optimization for data handler
  * Pointer need to be pass not copying data like this
  * Please point out how I can pass pointers around
- * 
- * 
- * 
  * @return int 
  */
 
@@ -21,6 +19,7 @@
 int main()
 {
     std::string input_filename;
+    bool main_proc_enable = true;
     
     std::cout << "Input file: ";
     std::cin >> input_filename;
@@ -30,20 +29,30 @@ int main()
     if (file_handler.get_status())
     {
         auto data_container = file_handler.get_data_container();
-/*         for (auto line: data_container)
-        {
-            for (auto col: line)
-            {
-                std::cout << col << " ";
-            }
-            std::cout << std::endl;
-        } */
         auto data_handler = DataHandler(data_container);
-        data_handler.print_courses_list();
+        // data_handler.print_courses_list();
     }
     else
     {
         return EXIT_FAILURE;
+    }
+
+    auto user_if = UserInterface();
+    while (main_proc_enable)
+    {
+        bool has_valid_command = false;
+        has_valid_command = user_if.get_command();
+
+        if (has_valid_command && !user_if.is_quit())
+        {
+            auto command = user_if.pass_command();
+            user_if.print_command();
+            // main_proc_enable = data_handler.poccess_command(command);
+        }
+        else
+        {
+            main_proc_enable = false;
+        }
     }
 
     return EXIT_SUCCESS;
