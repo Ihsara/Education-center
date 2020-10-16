@@ -1,3 +1,7 @@
 data.a
 __pycache__/
 *.input
+data/
+.vscode/
+build/
+.vs/
