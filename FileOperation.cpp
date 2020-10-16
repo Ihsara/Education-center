@@ -16,7 +16,6 @@ input_filename(input_filename), delimiter(delimiter)
         data_container = clean_up_raw_data();
         file_ops_status = verify_data();
     }
-    std::cout << file_ops_status << std::endl;
 }
 
 std::vector<std::string> FileOperation::get_raw_data()
