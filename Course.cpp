@@ -20,12 +20,12 @@ theme(theme), name(course)
     update_enrollment(location, enrollment);
 }
 
-std::string Course::get_name()
+std::string Course::get_name() const
 {
     return name;
 }
 
-std::string Course::get_theme()
+std::string Course::get_theme() const
 {
     return theme;
 }

@@ -15,11 +15,12 @@ public:
         std::string enrollment = ""
     );
 
-    std::string get_name();
-    std::string get_theme();
+    std::string get_name() const;
+    std::string get_theme() const ;
     std::vector<std::string> get_locations();
     std::map<std::string, int> get_enrollmments();
     int print_locations();
+    int print_info();
     int print_enrollments();
     int update_info(std::string location = "",
                         std::string theme = "",

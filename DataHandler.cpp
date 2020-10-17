@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "DataHandler.h"
 
 DataHandler::DataHandler(std::vector<std::vector<std::string>> raw_data_container)
@@ -157,9 +159,51 @@ bool DataHandler::courses_command(std::vector<std::string> command)
     return res;
 }
 
+bool operator<(const Course & lhs, const Course & rhs)
+{
+    return lhs.get_theme() < rhs.get_theme();
+}
+
+
+
 bool DataHandler::available_command(std::vector<std::string> command)
 {
     int res = 1;
+
+    auto locations_list = populate_locations();
+    std::vector<std::vector<std::string>> avai_course_list;
+
+    for (auto location : locations_list)
+    {
+        std::stable_sort(courses_list.begin(), courses_list.end());
+        for (auto course : courses_list)
+        {
+            std::vector<std::string> temp_avai_course_list;
+            auto course_locations = course.get_locations();
+            if (
+                std::find(course_locations.cbegin(),
+                            course_locations.cend(),
+                            location) != course_locations.cend()
+                && course.get_enrollmments().at(location) < 50
+            )
+            {
+                temp_avai_course_list.push_back(location);
+                temp_avai_course_list.push_back(course.get_theme());
+                temp_avai_course_list.push_back(course.get_name());
+            }
+            if (!temp_avai_course_list.empty())
+            {
+                avai_course_list.push_back(temp_avai_course_list);
+            }
+        }
+    }
+
+    // std::sort(avai_course_list.begin(), avai_course_list.end(), custom_sort);
+
+    for (auto avai : avai_course_list)
+    {
+        std::cout << avai[0] << " : " << avai[1] << " : " << avai[2] << std::endl;
+    }
 
     return res;
 }
@@ -182,6 +226,8 @@ std::vector<std::string> DataHandler::populate_locations()
         }
     }
 
+    std::sort(temp_container.begin(), temp_container.end());
+
     return temp_container;
 }
 
@@ -198,6 +244,8 @@ std::vector<std::string> DataHandler::populate_themes()
             temp_container.push_back(course.get_theme());
         }
     }
+
+    std::sort(temp_container.begin(), temp_container.end());
 
     return temp_container;
 }
