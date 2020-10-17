@@ -31,29 +31,30 @@ int main()
         auto data_container = file_handler.get_data_container();
         auto data_handler = DataHandler(data_container);
         // data_handler.print_courses_list();
+        auto user_if = UserInterface();
+        while (main_proc_enable)
+        {
+            bool has_valid_command = false;
+            has_valid_command = user_if.get_command();
+
+            if (has_valid_command && !user_if.is_quit())
+            {
+                auto command = user_if.pass_command();
+                // user_if.print_command();
+                main_proc_enable = data_handler.process_command(command);
+            }
+            else
+            {
+                main_proc_enable = false;
+            }
+        }        
     }
     else
     {
         return EXIT_FAILURE;
     }
 
-    auto user_if = UserInterface();
-    while (main_proc_enable)
-    {
-        bool has_valid_command = false;
-        has_valid_command = user_if.get_command();
 
-        if (has_valid_command && !user_if.is_quit())
-        {
-            auto command = user_if.pass_command();
-            user_if.print_command();
-            // main_proc_enable = data_handler.poccess_command(command);
-        }
-        else
-        {
-            main_proc_enable = false;
-        }
-    }
 
     return EXIT_SUCCESS;
 

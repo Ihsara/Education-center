@@ -26,6 +26,7 @@ bool UserInterface::get_command()
 
     while (!has_valid_command)
     {
+        // The very first call of this is called twice.
         std::cout << line_starter;
         getline(std::cin, raw_command);
         if (!raw_command.empty())
@@ -45,34 +46,34 @@ std::vector<std::string> UserInterface::command_constructor(std::string raw_comm
     auto quote_check_first_index = raw_command.find('\"');
     if (quote_check_first_index != std::string::npos)
     {
-        auto quote_check_second_index = raw_command.find('\"');
-        if (quote_check_second_index != std::string::npos)
-        {
-            query_string = raw_command.substr(
-                quote_check_first_index + 1 ,
-                quote_check_second_index - 1);
-            std::cout << query_string << std::endl;
-            raw_command.erase(quote_check_first_index - 1,
-                            quote_check_second_index + 1);
+        query_string = raw_command.substr(
+            quote_check_first_index + 1);
+        query_string.pop_back();
+        // std::cout << query_string << std::endl;
+        raw_command.erase(quote_check_first_index - 1);
 
-            std::cout << raw_command << std::endl;
-            has_quotes = true;
+        // std::cout << raw_command << std::endl;
+        has_quotes = true;
+    }
+
+    bool has_others = true;
+
+    while (has_others)
+    {
+        auto space_deli_index = raw_command.find(" ");
+        if (space_deli_index != std::string::npos)
+        {
+            temp_command.push_back(raw_command.substr(0, space_deli_index));
+            // std::cout << temp_command.front() << std::endl;
+            raw_command.erase(0, space_deli_index + 1);
+        }
+        else
+        {
+            has_others = false;
+            temp_command.push_back(raw_command);
         }
     }
 
-    auto space_deli_index = raw_command.find(" ");
-    if (space_deli_index != std::string::npos)
-    {
-        temp_command.push_back(raw_command.substr(0, space_deli_index));
-        std::cout << temp_command.front() << std::endl;
-        raw_command.erase(0, space_deli_index + 1);
-        raw_command.pop_back();
-        temp_command.push_back(raw_command);
-    }
-    else
-    {
-        temp_command.push_back(raw_command);
-    }
 
     if (has_quotes)
     {
